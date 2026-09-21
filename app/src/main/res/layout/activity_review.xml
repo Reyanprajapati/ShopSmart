@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/light_gray">
+
+    <Button
+        android:id="@+id/btnReviewBack"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="‹ Back"
+        android:textAllCaps="false"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="⭐ Rate Your Order"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:numStars="5"
+        android:stepSize="1"/>
+
+    <EditText
+        android:id="@+id/etReview"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
+        android:gravity="top"
+        android:hint="Write your review..."
+        android:padding="15dp"
+        android:background="@drawable/bg_input"/>
+
+    <Button
+        android:id="@+id/btnSubmitReview"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:text="⭐ SUBMIT REVIEW"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_login_button"/>
+
+</LinearLayout>
