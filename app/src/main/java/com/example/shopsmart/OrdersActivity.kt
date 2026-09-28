@@ -1,20 +1,22 @@
 package com.example.shopsmart
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.ComponentActivity
+import androidx.core.graphics.toColorInt
+import java.util.Locale
 import org.json.JSONArray
 import org.json.JSONObject
 
-class OrdersActivity : ComponentActivity() {
+class OrdersActivity : Activity() {
 
     private lateinit var btnBack: TextView
     private lateinit var layoutOrdersList: LinearLayout
@@ -38,7 +40,7 @@ class OrdersActivity : ComponentActivity() {
     }
 
     private fun initPrefs() {
-        orderPrefs = getSharedPreferences("ShopSmartOrders", Context.MODE_PRIVATE)
+        orderPrefs = getSharedPreferences("ShopSmartOrders", MODE_PRIVATE)
     }
 
     private fun setupListeners() {
@@ -53,7 +55,7 @@ class OrdersActivity : ComponentActivity() {
         val jsonStr = orderPrefs.getString("ORDERS", "[]") ?: "[]"
         val orders = try {
             JSONArray(jsonStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
@@ -96,10 +98,10 @@ class OrdersActivity : ComponentActivity() {
         }
 
         val tvId = TextView(this).apply {
-            text = "Order #$orderId"
-            setTextColor(Color.parseColor("#6C63FF"))
+            text = getString(R.string.order_number, orderId)
+            setTextColor("#6C63FF".toColorInt())
             textSize = 15f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
 
@@ -107,7 +109,7 @@ class OrdersActivity : ComponentActivity() {
             text = status
             setTextColor(Color.WHITE)
             textSize = 12f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
             setBackgroundResource(R.drawable.bg_badge_pill)
             setPadding(12, 4, 12, 4)
         }
@@ -116,9 +118,10 @@ class OrdersActivity : ComponentActivity() {
         headerRow.addView(tvStatus)
         card.addView(headerRow)
 
+        val formattedTotal = String.format(Locale.US, "%.2f", total)
         val tvInfo = TextView(this).apply {
-            text = "Payment: $payment\nTotal Paid: ₹${String.format("%.2f", total)}"
-            setTextColor(Color.parseColor("#202124"))
+            text = getString(R.string.order_payment_info, payment, formattedTotal)
+            setTextColor("#202124".toColorInt())
             textSize = 13f
             setPadding(0, 10, 0, 10)
         }
@@ -151,7 +154,7 @@ class OrdersActivity : ComponentActivity() {
         val btnReview = Button(this).apply {
             text = "⭐ Review"
             textSize = 12f
-            setTextColor(Color.parseColor("#6C63FF"))
+            setTextColor("#6C63FF".toColorInt())
             setBackgroundResource(R.drawable.bg_card_white)
             layoutParams = LinearLayout.LayoutParams(0, 42, 1f).apply {
                 marginStart = 6

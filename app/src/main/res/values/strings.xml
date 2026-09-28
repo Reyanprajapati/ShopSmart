@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ShopSmart</string>
+    <string name="welcome_customer">Hello, Customer 👋</string>
+    <string name="welcome_user">Hello, %1$s 👋</string>
+    <string name="search_products_hint">Search products&#8230;</string>
+    <string name="browse_all_products">Browse All Products</string>
+    <string name="shop_by_category">Shop by Category</string>
+    <string name="my_orders">📦 My Orders</string>
+    <string name="my_orders_subtitle">View your previous and current orders</string>
+    <string name="order_number">Order #%1$s</string>
+    <string name="order_payment_info">Payment: %1$s\nTotal Paid: ₹%2$s</string>
+    <string name="track_order">📍 Track Order</string>
+    <string name="review_order">⭐ Review</string>
 </resources>

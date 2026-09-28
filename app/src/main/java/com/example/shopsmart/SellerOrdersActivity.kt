@@ -1,8 +1,9 @@
 package com.example.shopsmart
 
-import android.content.Context
+import android.app.Activity
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Locale
 
-class SellerOrdersActivity : ComponentActivity() {
+class SellerOrdersActivity : Activity() {
 
     private lateinit var btnBack: TextView
     private lateinit var tvSellerOrdersCount: TextView
@@ -42,7 +45,7 @@ class SellerOrdersActivity : ComponentActivity() {
     }
 
     private fun initPrefs() {
-        orderPrefs = getSharedPreferences("ShopSmartOrders", Context.MODE_PRIVATE)
+        orderPrefs = getSharedPreferences("ShopSmartOrders", MODE_PRIVATE)
     }
 
     private fun setupListeners() {
@@ -57,11 +60,12 @@ class SellerOrdersActivity : ComponentActivity() {
         val jsonStr = orderPrefs.getString("ORDERS", "[]") ?: "[]"
         val orders = try {
             JSONArray(jsonStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
-        tvSellerOrdersCount.text = "${orders.length()} Orders"
+        val countText = "${orders.length()} Orders"
+        tvSellerOrdersCount.text = countText
         tvEmptySellerOrders.visibility = if (orders.length() == 0) View.VISIBLE else View.GONE
 
         // Newest orders first
@@ -100,10 +104,11 @@ class SellerOrdersActivity : ComponentActivity() {
         }
 
         val tvId = TextView(this).apply {
-            text = "Order #$orderId"
-            setTextColor(Color.parseColor("#6C63FF"))
+            val idText = "Order #$orderId"
+            text = idText
+            setTextColor("#6C63FF".toColorInt())
             textSize = 15f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
 
@@ -111,7 +116,7 @@ class SellerOrdersActivity : ComponentActivity() {
             text = currentStatus
             setTextColor(Color.WHITE)
             textSize = 12f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
             setBackgroundResource(R.drawable.bg_badge_pill)
             setPadding(12, 4, 12, 4)
         }
@@ -122,8 +127,10 @@ class SellerOrdersActivity : ComponentActivity() {
 
         // Customer details
         val tvDetails = TextView(this).apply {
-            text = "Customer: $customerName\nPhone: +91 $mobile\nAddress: $address\nPayment: $payment\nTotal: ₹${String.format("%.2f", total)}"
-            setTextColor(Color.parseColor("#202124"))
+            val formattedTotal = String.format(Locale.getDefault(), "%.2f", total)
+            val detailsText = "Customer: $customerName\nPhone: +91 $mobile\nAddress: $address\nPayment: $payment\nTotal: ₹$formattedTotal"
+            text = detailsText
+            setTextColor("#202124".toColorInt())
             textSize = 13f
             setPadding(0, 10, 0, 10)
         }
@@ -131,7 +138,8 @@ class SellerOrdersActivity : ComponentActivity() {
 
         // Update Status Button
         val btnUpdateStatus = Button(this).apply {
-            text = "Update Status ➔"
+            val btnText = "Update Status ➔"
+            text = btnText
             textSize = 13f
             setTextColor(Color.WHITE)
             setBackgroundResource(R.drawable.bg_login_button)
@@ -148,19 +156,22 @@ class SellerOrdersActivity : ComponentActivity() {
         val jsonStr = orderPrefs.getString("ORDERS", "[]") ?: "[]"
         val orders = try {
             JSONArray(jsonStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
-        if (orderIndex >= 0 && orderIndex < orders.length()) {
+        if (orderIndex in 0 until orders.length()) {
             val order = orders.getJSONObject(orderIndex)
             val currentIndex = statusSteps.indexOf(currentStatus)
-            val nextIndex = if (currentIndex < statusSteps.size - 1) currentIndex + 1 else 0
+            val nextIndex = if (currentIndex in 0 until statusSteps.size - 1) currentIndex + 1 else 0
             val nextStatus = statusSteps[nextIndex]
 
             order.put("status", nextStatus)
-            orderPrefs.edit().putString("ORDERS", orders.toString()).apply()
-            Toast.makeText(this, "Status updated to: $nextStatus", Toast.LENGTH_SHORT).show()
+            orderPrefs.edit {
+                putString("ORDERS", orders.toString())
+            }
+            val toastMessage = "Status updated to: $nextStatus"
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
             loadOrders()
         }
     }

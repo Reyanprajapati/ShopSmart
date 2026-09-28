@@ -1,15 +1,15 @@
 package com.example.shopsmart
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import org.json.JSONArray
 import org.json.JSONObject
 
-class ReviewActivity : ComponentActivity() {
+class ReviewActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

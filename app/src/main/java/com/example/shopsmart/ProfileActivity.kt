@@ -1,14 +1,14 @@
 package com.example.shopsmart
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 
-class ProfileActivity : ComponentActivity() {
+class ProfileActivity : Activity() {
 
     private lateinit var btnBack: TextView
     private lateinit var tvProfileUsername: TextView

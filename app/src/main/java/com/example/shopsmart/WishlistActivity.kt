@@ -1,6 +1,6 @@
 package com.example.shopsmart
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -11,11 +11,11 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Locale
 
-class WishlistActivity : ComponentActivity() {
+class WishlistActivity : Activity() {
 
     private lateinit var btnBack: TextView
     private lateinit var btnGoToCart: TextView
@@ -42,8 +42,8 @@ class WishlistActivity : ComponentActivity() {
     }
 
     private fun initPrefs() {
-        wishlistPrefs = getSharedPreferences("ShopSmartWishlist", Context.MODE_PRIVATE)
-        cartPrefs = getSharedPreferences("ShopSmartCart", Context.MODE_PRIVATE)
+        wishlistPrefs = getSharedPreferences("ShopSmartWishlist", MODE_PRIVATE)
+        cartPrefs = getSharedPreferences("ShopSmartCart", MODE_PRIVATE)
     }
 
     private fun setupListeners() {
@@ -62,7 +62,7 @@ class WishlistActivity : ComponentActivity() {
         val wishStr = wishlistPrefs.getString("WISHLIST", "[]") ?: "[]"
         val wishArray = try {
             JSONArray(wishStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
@@ -117,7 +117,7 @@ class WishlistActivity : ComponentActivity() {
         }
 
         val tvPrice = TextView(this).apply {
-            text = "₹${String.format("%.2f", price)}"
+            text = "₹${String.format(Locale.US, "%.2f", price)}"
             setTextColor(Color.parseColor("#6C63FF"))
             textSize = 13f
         }
@@ -161,7 +161,7 @@ class WishlistActivity : ComponentActivity() {
         val cartStr = cartPrefs.getString("CART", "[]") ?: "[]"
         val cartArray = try {
             JSONArray(cartStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
@@ -194,11 +194,11 @@ class WishlistActivity : ComponentActivity() {
         val wishStr = wishlistPrefs.getString("WISHLIST", "[]") ?: "[]"
         val wishArray = try {
             JSONArray(wishStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
-        if (index in 0 until wishArray.length()) {
+        if ((index in 0 until wishArray.length())) {
             wishArray.remove(index)
             wishlistPrefs.edit().putString("WISHLIST", wishArray.toString()).apply()
             Toast.makeText(this, "Removed from wishlist", Toast.LENGTH_SHORT).show()

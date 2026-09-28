@@ -1,13 +1,13 @@
 package com.example.shopsmart
 
+import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import org.json.JSONArray
 
-class OrderTrackingActivity : ComponentActivity() {
+class OrderTrackingActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,9 +1,10 @@
 package com.example.shopsmart
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,11 +15,11 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Locale
 
-class CustomerProductsActivity : ComponentActivity() {
+class CustomerProductsActivity : Activity() {
 
     private lateinit var btnBack: TextView
     private lateinit var btnWishlist: TextView
@@ -89,9 +90,9 @@ class CustomerProductsActivity : ComponentActivity() {
     }
 
     private fun initPrefs() {
-        inventoryPrefs = getSharedPreferences("ShopSmartInventory", Context.MODE_PRIVATE)
-        cartPrefs = getSharedPreferences("ShopSmartCart", Context.MODE_PRIVATE)
-        wishlistPrefs = getSharedPreferences("ShopSmartWishlist", Context.MODE_PRIVATE)
+        inventoryPrefs = getSharedPreferences("ShopSmartInventory", MODE_PRIVATE)
+        cartPrefs = getSharedPreferences("ShopSmartCart", MODE_PRIVATE)
+        wishlistPrefs = getSharedPreferences("ShopSmartWishlist", MODE_PRIVATE)
     }
 
     private fun setupTopListeners() {
@@ -142,7 +143,7 @@ class CustomerProductsActivity : ComponentActivity() {
 
     private fun loadProductsData() {
         val jsonStr = inventoryPrefs.getString("PRODUCTS", "") ?: ""
-        if (jsonStr.isEmpty() || jsonStr == "[]") {
+        if ((jsonStr.isEmpty()) || (jsonStr == "[]")) {
             allProducts = JSONArray().apply {
                 put(JSONObject().apply {
                     put("name", "Fresh Cow Milk")
@@ -191,7 +192,7 @@ class CustomerProductsActivity : ComponentActivity() {
         } else {
             allProducts = try {
                 JSONArray(jsonStr)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 JSONArray()
             }
         }
@@ -217,7 +218,7 @@ class CustomerProductsActivity : ComponentActivity() {
             if (matchesQuery && matchesCat) {
                 matchCount++
                 val isWishlisted = wishlistItems.contains(name)
-                val card = createProductCard(name, price, stock, emoji, prodCategory, isWishlisted, product)
+                val card = createProductCard(name, price, stock, emoji, isWishlisted, product)
                 layoutProductsList.addView(card)
             }
         }
@@ -272,7 +273,6 @@ class CustomerProductsActivity : ComponentActivity() {
         price: Double,
         stock: Int,
         emoji: String,
-        category: String,
         isWishlisted: Boolean,
         productJson: JSONObject
     ): View {
@@ -310,14 +310,14 @@ class CustomerProductsActivity : ComponentActivity() {
             text = name
             setTextColor(Color.parseColor("#202124"))
             textSize = 15f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
         }
 
         val tvStock = TextView(this).apply {
             if (stock > 5) {
                 text = "🟢 In Stock ($stock available)"
                 setTextColor(Color.parseColor("#00C9A7"))
-            } else if (stock in 1..5) {
+            } else if ((stock in 1..5)) {
                 text = "🟠 Only $stock left!"
                 setTextColor(Color.parseColor("#FF9F43"))
             } else {
@@ -328,10 +328,10 @@ class CustomerProductsActivity : ComponentActivity() {
         }
 
         val tvPrice = TextView(this).apply {
-            text = "₹${String.format("%.2f", price)}"
+            text = "₹${String.format(Locale.US, "%.2f", price)}"
             setTextColor(Color.parseColor("#6C63FF"))
             textSize = 16f
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTypeface(null, Typeface.BOLD)
             setPadding(0, 4, 0, 0)
         }
 
@@ -382,7 +382,7 @@ class CustomerProductsActivity : ComponentActivity() {
         val cartStr = cartPrefs.getString("CART", "[]") ?: "[]"
         val cartArray = try {
             JSONArray(cartStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 
@@ -418,7 +418,7 @@ class CustomerProductsActivity : ComponentActivity() {
         val wishStr = wishlistPrefs.getString("WISHLIST", "[]") ?: "[]"
         val wishArray = try {
             JSONArray(wishStr)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONArray()
         }
 

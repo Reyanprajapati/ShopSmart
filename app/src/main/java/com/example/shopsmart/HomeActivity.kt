@@ -77,7 +77,7 @@ class HomeActivity : ComponentActivity() {
     }
 
     private fun loadDashboardData() {
-        // Welcome Username
+
         val username = prefs.getString("USERNAME", "Seller") ?: "Seller"
         tvSellerGreeting.text = "Welcome, $username 👋"
 
